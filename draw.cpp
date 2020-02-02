@@ -290,7 +290,6 @@ void drawString(float x, float y, float xscl, float yscl,
 	glTranslatef(x, y, 0.0);
 	glScalef(xscl*0.01, yscl*0.01, 1.0);
 
-	/* ストロークフォント文字列の描画 */
 	while (*string) {
 		glutStrokeCharacter(font, *string++);
 	}
@@ -305,89 +304,7 @@ void drawString(float x, float y, float xscl, float yscl,
 void DrawScene( void )
 {
 
-	//Fileld
-
-	setMaterialColor(0,0.6,0.5);
-	glBegin(GL_POLYGON); {
-
-		for (int i = 0; i < 4; i++) {
-			glVertex3f(
-				simdata.groundVertex[i].x,
-				simdata.groundVertex[i].y,
-				simdata.groundVertex[i].z
-				);
-		}
-				
-	}
-	glEnd();
-
-	//PlayerCharacter
-	glPushMatrix();
-	{
-		SetTransform(&simdata.player);
-		SetColor(&simdata.player);
-		drawCharacter();
-	}
-	glPopMatrix();
-
-	//Enemy
-
-	for (int i = 0; i < simdata.enemy_count; i++)
-	{
-
-		if (!simdata.enemies[i].visible) continue;
-		glPushMatrix();
-		{
-			SetTransform(&simdata.enemies[i]);
-			SetColor(&simdata.enemies[i]);
-			drawCharacter();
-		}
-		glPopMatrix();
-
-	}
-
 	
-
-
-	//Bullets
-	for (int i = 0; i < simdata.bullet_count; i++)
-	{
-		if (!simdata.bullets[i].visible) continue;
-		glPushMatrix();
-		{
-			SetTransform(&simdata.bullets[i]);
-			SetColor(&simdata.bullets[i]);
-			drawSolidSphere();
-		}
-		glPopMatrix();
-
-	}
-
-	//TrashArea
-
-	glPushMatrix();
-	{
-		SetTransform(&simdata.trashZone);
-		SetColor(&simdata.trashZone);
-		drawSolidSphere();
-	}
-	glPopMatrix();
-
-	//fortuneBox
-	for (int i = 0; i < simdata.fortuneBox_count; i++)
-	{
-		if (!simdata.fortuneBoxes[i].visible) continue;
-		glPushMatrix();
-		{
-			SetTransform(&simdata.fortuneBoxes[i]);
-			SetColor(&simdata.fortuneBoxes[i]);
-			drawSolidCube();
-		}
-		glPopMatrix();
-
-	}
-
-	drawGizmo();
 
 	//=========HUD==========
 
@@ -402,41 +319,7 @@ void DrawScene( void )
 
 	//======================
 
-	char score_str[10];
 	
-	sprintf(score_str,"%09d",simdata.currentScore);
-
-	drawString(5.0, 5.0, 15.0, 15.0,
-				GLUT_STROKE_ROMAN,
-		"SCORE: ");
-	drawString(80, 5.0, 15.0, 15.0,
-		GLUT_STROKE_ROMAN,
-		score_str);
-
-	if (simdata.isCheckFortune) {
-
-		simdata.frameCount++;
-		if (simdata.frameCount >= simdata.displayFrame * simdata.currentFps) {
-			simdata.isCheckFortune = false;
-		}
-		drawString(100, 250, 50, 50,
-			GLUT_STROKE_ROMAN,
-			simdata.fortune[simdata.fortuneNum]);
-	}
-
-	switch (simdata.currentState)
-	{
-		case 2:
-			drawString(100, 250, 50, 50,
-				GLUT_STROKE_ROMAN,
-				"GAME CLEAR!!!!!!");
-			break;
-		case 3:
-			drawString(100, 200, 50, 50,
-				GLUT_STROKE_ROMAN,
-				"GAME OVER");
-			break;
-	}
 	//======END===HUD========
 
     return;
